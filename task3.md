@@ -9,100 +9,53 @@
 ```mermaid
 
 flowchart TB
+    subgraph Client["Mobile App iOS/Android"]
+        A[Polzovatel]
+        B[Device Token]
+    end
 
-&#x20;   subgraph Client\["Mobile App (iOS/Android)"]
+    subgraph Backend["Backend Microservices"]
+        C[API Gateway]
+        D[User Service]
+        E[Cart Service]
+        F[Order Service]
+        G[Marketing Service]
+    end
 
-&#x20;       A\[Пользователь]
+    subgraph Messaging["Message Broker"]
+        H[(Kafka/RabbitMQ)]
+    end
 
-&#x20;       B\[Device Token]
+    subgraph Push["Push Notification Service"]
+        I[Event Handler]
+        J[Templating]
+        K[Rate Limiting]
+        L[Logging]
+    end
 
-&#x20;   end
+    subgraph External["External Services"]
+        M[FCM Google]
+        N[APNs Apple]
+    end
 
-
-
-&#x20;   subgraph Backend\["Backend - Микросервисы"]
-
-&#x20;       C\[API Gateway]
-
-&#x20;       D\[User Service<br/>хранит user\_id ↔ device\_token]
-
-&#x20;       E\[Cart Service]
-
-&#x20;       F\[Order Service]
-
-&#x20;       G\[Marketing Service]
-
-&#x20;   end
-
-
-
-&#x20;   subgraph Messaging\["Message Broker"]
-
-&#x20;       H\[(Kafka / RabbitMQ)]
-
-&#x20;   end
-
-
-
-&#x20;   subgraph Push\["Push Notification Service"]
-
-&#x20;       I\[Обработчик событий]
-
-&#x20;       J\[Шаблонизация<br/>и локализация]
-
-&#x20;       K\[Rate Limiting]
-
-&#x20;       L\[Логирование]
-
-&#x20;   end
-
-
-
-&#x20;   subgraph External\["Внешние сервисы"]
-
-&#x20;       M\[FCM Google<br/>Firebase Cloud Messaging]
-
-&#x20;       N\[APNs Apple<br/>Apple Push Notification service]
-
-&#x20;   end
-
-
-
-&#x20;   A -->|1. Регистрация| B
-
-&#x20;   B -->|2. Отправка token + user\_id| C
-
-&#x20;   C --> D
-
-&#x20;   
-
-&#x20;   E -->|3. Событие:<br/>cart\_abandoned| H
-
-&#x20;   F -->|3. Событие:<br/>order\_cancelled| H
-
-&#x20;   G -->|3. Событие:<br/>promo\_campaign| H
-
-&#x20;   
-
-&#x20;   H --> I
-
-&#x20;   I --> J
-
-&#x20;   J --> K
-
-&#x20;   K --> L
-
-&#x20;   
-
-&#x20;   L -->|4. Отправка| M
-
-&#x20;   L -->|4. Отправка| N
-
-&#x20;   
-
-&#x20;   M -->|5. Push| A
-
-&#x20;   N -->|5. Push| A
+    A -->|1. Registration| B
+    B -->|2. token + user_id| C
+    C --> D
+    
+    E -->|3. cart_abandoned| H
+    F -->|3. order_cancelled| H
+    G -->|3. promo_campaign| H
+    
+    H --> I
+    I --> J
+    J --> K
+    K --> L
+    
+    L -->|4. Send| M
+    L -->|4. Send| N
+    
+    M -->|5. Push| A
+    N -->|5. Push| A
 ```
 
 
